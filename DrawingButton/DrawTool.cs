@@ -13,6 +13,7 @@ namespace DrawingButton
         private List<FigureRelation> _relations;
         private Bitmap _canvas;
         private AbstractFigure _currentFigure;
+        private CaptureType _captureType;
 
         /// <summary>
         /// Список фигур
