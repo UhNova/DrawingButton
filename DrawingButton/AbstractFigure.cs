@@ -10,8 +10,9 @@ namespace DrawingButton
 {
     abstract class AbstractFigure
     {
-        private Point _start = new Point(0, 0);
-        private Point _end = new Point(0, 0);
+        protected Point _start = new Point(0, 0);
+        protected Point _end = new Point(0, 0);
+        protected FigureType _figureType;
 
         public Point Start
         {
@@ -34,6 +35,18 @@ namespace DrawingButton
             set
             {
                 _end = value;
+            }
+        }
+
+        public FigureType FigureType
+        {
+            get
+            {
+                return _figureType;
+            }
+            set
+            {
+                _figureType = value;
             }
         }
 

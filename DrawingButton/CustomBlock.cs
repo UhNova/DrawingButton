@@ -10,9 +10,10 @@ namespace DrawingButton
 {
     class CustomBlock : AbstractFigure
     {
-        private int _type;
+        private BlockType _type;
+        private Pen _pen;
 
-        public int BlockType
+        public BlockType BlockType
         {
             get
             {
@@ -24,12 +25,29 @@ namespace DrawingButton
             }
         }
 
-        public void DrawFigure(Bitmap target)
+        public override void DrawFigure(Bitmap target)
         {
+            Graphics graph = Graphics.FromImage(target);
+            Rectangle targetRectangle = new Rectangle();
 
+            switch (_type)
+            {
+                case BlockType.RedSolid:
+                    _pen = new Pen(Color.Red, 1);
+
+                    Point realStart = new Point();
+                    realStart.X = (_start.X < _end.X) ? _start.X : _end.X;
+                    realStart.Y = (_start.Y < _end.Y) ? _start.Y : _end.Y;
+
+                    targetRectangle.Location = realStart;
+                    targetRectangle.Height = Math.Abs(_start.Y - _end.Y);
+                    targetRectangle.Width = Math.Abs(_start.X - _end.X);
+                    break;
+            }
+            graph.DrawRectangle(_pen, targetRectangle);
         }
 
-        public void MoveOrResize(Point start, Point end)
+        public override void MoveOrResize(Point start, Point end)
         {
 
         }

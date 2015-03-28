@@ -67,6 +67,8 @@ namespace DrawingButton
         public DrawTool(Bitmap canvas)
         {
             _canvas = canvas;
+            _figures = new List<AbstractFigure>();
+            _relations = new List<FigureRelation>();
         }
         
         /// <summary>
@@ -115,7 +117,35 @@ namespace DrawingButton
         /// <param name="type">Тип фигуры</param>
         public void InsertOrUpdate(Point start, Point end, FigureType type)
         {
-
+            var existFigure = _figures.FirstOrDefault(o => (o.Start.X == start.X) && (o.Start.Y == start.Y) && (o.FigureType == type));
+            if (existFigure != null)
+            {
+                existFigure.End = end;
+            }
+            else
+            {
+                AbstractFigure newFigure = null;
+                switch (type)
+                {
+                    case FigureType.Arrow:
+                        CustomArrow newArrow = new CustomArrow();
+                        newArrow.ArrowType = ArrowType.Black;
+                        newArrow.Start = start;
+                        newArrow.End = end;
+                        newFigure = newArrow;
+                        break;
+                    case FigureType.Block:
+                        CustomBlock newBlock = new CustomBlock();
+                        newBlock.BlockType = BlockType.RedSolid;
+                        newBlock.Start = start;
+                        newBlock.End = end;
+                        newFigure = newBlock;
+                        break;
+                }
+                newFigure.FigureType = type;
+                _figures.Add(newFigure);
+            }
+            
         }
     }
 }

@@ -10,9 +10,10 @@ namespace DrawingButton
 {
     class CustomArrow : AbstractFigure
     {
-        private int _type;
+        private ArrowType _type;
+        private Pen _pen;
 
-        public int ArrowType
+        public ArrowType ArrowType
         {
             get
             {
@@ -24,12 +25,19 @@ namespace DrawingButton
             }
         }
 
-        public void DrawFigure(Bitmap target)
+        public override void DrawFigure(Bitmap target)
         {
-
+            Graphics graph = Graphics.FromImage(target);
+            switch (_type)
+            {
+                case ArrowType.Black:
+                    _pen = new Pen(Color.Black, 1);
+                    break;
+            }
+            graph.DrawLine(_pen, _start, _end);
         }
 
-        public void MoveOrResize(Point start, Point end)
+        public override void MoveOrResize(Point start, Point end)
         {
 
         }
