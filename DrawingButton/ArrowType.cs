@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DrawingButton
+﻿namespace DrawingButton
 {
     enum ArrowType
     {
-        Black
+        Inheritance = 1,
+        Dependency = 2
     }
 }

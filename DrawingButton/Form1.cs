@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DrawingButton.Properties;
 
 namespace DrawingButton
 {
@@ -14,16 +10,27 @@ namespace DrawingButton
     {
         private Bitmap _mbit;
         private DrawTool _drawTool;
-        private int start_x = 0, start_y = 0;
+        private int start_x, start_y;
+        private readonly List<BlockType> _blockTypes = new List<BlockType> { BlockType.Interface, BlockType.Class };
+        private readonly List<ArrowType> _arrowTypes = new List<ArrowType> { ArrowType.Inheritance, ArrowType.Dependency };
+
+        private FigureType _checkedFigureType
+        {
+            get
+            {
+                return ((rbBlock.Checked) ? FigureType.Block : FigureType.Relation);
+            }
+        }
 
         public DrawingButton()
         {
             InitializeComponent();
             pb_drawing.Visible = false;
             pb_drawing.Enabled = false;
-            pb_drawing.Width = (this.Width * 9 / 10);
-            pb_drawing.Height = (this.Height * 5 / 8);
-            pb_drawing.Location = new Point(this.Width / 20, this.Height / 4);
+            pb_drawing.Width = (Width * 9 / 10);
+            pb_drawing.Height = (Height * 5 / 8);
+            pb_drawing.Location = new Point(Width / 20, Height / 4);
+            cmbType.DataSource = _blockTypes.ToArray();
         }
 
         public Point getEnd(MouseEventArgs e)
@@ -61,7 +68,7 @@ namespace DrawingButton
             {
                 pb_drawing.Visible = false;
                 pb_drawing.Enabled = false;
-                btn_start.Text = "Рисовать!";
+                btn_start.Text = Resources.DrawingButton_btn_start_Click_Draw;
             }
             else
             {
@@ -69,7 +76,7 @@ namespace DrawingButton
                 pb_drawing.Image = _mbit;
                 pb_drawing.Visible = true;
                 pb_drawing.Enabled = true;
-                btn_start.Text = "Закончить!";
+                btn_start.Text = Resources.DrawingButton_btn_start_Click_EndDraw;
                 _drawTool = new DrawTool(_mbit);
             }
         }
@@ -91,7 +98,7 @@ namespace DrawingButton
 
                 _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
                 _drawTool.Canvas = _mbit;
-                _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, FigureType.Block);
+                _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
                 _drawTool.DrawAll();
                 pb_drawing.Image = _mbit;
             }
@@ -106,9 +113,21 @@ namespace DrawingButton
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
-            _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, FigureType.Block);
+            _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
             _drawTool.DrawAll();
             pb_drawing.Image = _mbit;
+        }
+
+        private void rbArrow_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                cmbType.DataSource = _arrowTypes;
+            }
+            else
+            {
+                cmbType.DataSource = _blockTypes;
+            }
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DrawingButton
 {
@@ -127,16 +124,16 @@ namespace DrawingButton
                 AbstractFigure newFigure = null;
                 switch (type)
                 {
-                    case FigureType.Arrow:
+                    case FigureType.Relation:
                         CustomArrow newArrow = new CustomArrow();
-                        newArrow.ArrowType = ArrowType.Black;
+                        newArrow.ArrowType = ArrowType.Inheritance;
                         newArrow.Start = start;
                         newArrow.End = end;
                         newFigure = newArrow;
                         break;
                     case FigureType.Block:
                         CustomBlock newBlock = new CustomBlock();
-                        newBlock.BlockType = BlockType.RedSolid;
+                        newBlock.BlockType = BlockType.Class;
                         newBlock.Start = start;
                         newBlock.End = end;
                         newFigure = newBlock;

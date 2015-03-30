@@ -114,4 +114,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DrawingButton_btn_start_Click_Draw" xml:space="preserve">
+    <value>Рисовать!</value>
+  </data>
+  <data name="DrawingButton_btn_start_Click_EndDraw" xml:space="preserve">
+    <value>Закончить!</value>
+  </data>
 </root>
