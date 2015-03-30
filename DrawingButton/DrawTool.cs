@@ -125,17 +125,11 @@ namespace DrawingButton
                 switch (type)
                 {
                     case FigureType.Relation:
-                        CustomArrow newArrow = new CustomArrow();
-                        newArrow.ArrowType = ArrowType.Inheritance;
-                        newArrow.Start = start;
-                        newArrow.End = end;
+                        var newArrow = new CustomArrow {ArrowType = ArrowType.Inheritance, Start = start, End = end};
                         newFigure = newArrow;
                         break;
                     case FigureType.Block:
-                        CustomBlock newBlock = new CustomBlock();
-                        newBlock.BlockType = BlockType.Class;
-                        newBlock.Start = start;
-                        newBlock.End = end;
+                        var newBlock = new CustomBlock {BlockType = BlockType.Class, Start = start, End = end};
                         newFigure = newBlock;
                         break;
                 }

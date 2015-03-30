@@ -21,7 +21,7 @@ namespace DrawingButton
 
         public override void DrawFigure(Bitmap target)
         {
-            Graphics graph = Graphics.FromImage(target);
+            var graph = Graphics.FromImage(target);
             switch (_type)
             {
                 case ArrowType.Inheritance:

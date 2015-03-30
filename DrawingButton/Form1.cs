@@ -35,7 +35,7 @@ namespace DrawingButton
 
         public Point getEnd(MouseEventArgs e)
         {
-            Point Result = new Point();
+            var Result = new Point();
             int end_x;
             int end_y;
 
@@ -89,27 +89,25 @@ namespace DrawingButton
 
         private void pb_drawing_MouseMove(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
-            {
-                pb_drawing.Refresh();
+            if (e.Button != MouseButtons.Left) return;
+            pb_drawing.Refresh();
                 
-                int end_x = getEnd(e).X;
-                int end_y = getEnd(e).Y;
+            var end_x = getEnd(e).X;
+            var end_y = getEnd(e).Y;
 
-                _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
-                _drawTool.Canvas = _mbit;
-                _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
-                _drawTool.DrawAll();
-                pb_drawing.Image = _mbit;
-            }
+            _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
+            _drawTool.Canvas = _mbit;
+            _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
+            _drawTool.DrawAll();
+            pb_drawing.Image = _mbit;
         }
 
         private void pb_drawing_MouseUp(object sender, MouseEventArgs e)
         {
             pb_drawing.Refresh();
 
-            int end_x = getEnd(e).X;
-            int end_y = getEnd(e).Y;
+            var end_x = getEnd(e).X;
+            var end_y = getEnd(e).Y;
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
