@@ -36,8 +36,7 @@ namespace DrawingButton
         public Point getEnd(MouseEventArgs e)
         {
             var Result = new Point();
-            int end_x;
-            int end_y;
+            int end_x, end_y;
 
             if ((e.X >= 0) && (e.X <= pb_drawing.Size.Width - 3))
             {
@@ -113,6 +112,7 @@ namespace DrawingButton
             _drawTool.Canvas = _mbit;
             _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
             _drawTool.DrawAll();
+            _drawTool.FreeCapture();
             pb_drawing.Image = _mbit;
         }
 

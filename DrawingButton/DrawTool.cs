@@ -11,6 +11,10 @@ namespace DrawingButton
         private Bitmap _canvas;
         private AbstractFigure _currentFigure;
         private CaptureType _captureType;
+        private Point _initialStart, _initialEnd;
+
+        private bool _busyCreating;
+        private bool _busyMoving;
 
         /// <summary>
         /// Список фигур
@@ -66,6 +70,17 @@ namespace DrawingButton
             _canvas = canvas;
             _figures = new List<AbstractFigure>();
             _relations = new List<FigureRelation>();
+            _busyCreating = false;
+            _busyMoving = false;
+        }
+
+        /// <summary>
+        /// Освободить захват фигуры
+        /// </summary>
+        public void FreeCapture()
+        {
+            _busyMoving = false;
+            _busyCreating = false;
         }
         
         /// <summary>
@@ -82,6 +97,7 @@ namespace DrawingButton
         private bool _checkBinding(Point start, Point end)
         {
             //Дописать
+
             return true;
         }
 
@@ -89,9 +105,30 @@ namespace DrawingButton
         /// Попытка захвата фигуры
         /// </summary>
         /// <param name="target">Точка захвата</param>
-        public void TryCapture(Point target)
+        public bool TryCapture(Point target)
         {
+            if (_busyMoving) return (_currentFigure != null);
 
+            _currentFigure =
+                _figures.FirstOrDefault(
+                    o =>
+                        (((CustomBlock)o).RealStart.X <= target.X) && (((CustomBlock)o).RealStart.Y <= target.Y) &&
+                        (((CustomBlock)o).RealEnd.X >= target.X) && (((CustomBlock)o).RealEnd.Y >= target.Y));
+
+            if (_currentFigure == null) return (_currentFigure != null);
+
+            _initialStart = new Point
+            {
+                X = _currentFigure.Start.X,
+                Y = _currentFigure.Start.Y
+            };
+            _initialEnd = new Point
+            {
+                X = _currentFigure.End.X,
+                Y = _currentFigure.End.Y
+            };
+
+            return (_currentFigure != null);
         }
 
         private AbstractFigure _isDragging()
@@ -114,27 +151,52 @@ namespace DrawingButton
         /// <param name="type">Тип фигуры</param>
         public void InsertOrUpdate(Point start, Point end, FigureType type)
         {
-            var existFigure = _figures.FirstOrDefault(o => (o.Start.X == start.X) && (o.Start.Y == start.Y) && (o.FigureType == type));
-            if (existFigure != null)
+            if (TryCapture(start) && (!_busyCreating))
             {
-                existFigure.End = end;
+                _captureType = CaptureType.Drag;
+
+                var offsetX = end.X - start.X;
+                var offsetY = end.Y - start.Y;
+
+                _currentFigure.Start = new Point
+                {
+                    X = _initialStart.X + offsetX,
+                    Y = _initialStart.Y + offsetY
+                };
+                _currentFigure.End = new Point
+                {
+                    X = _initialEnd.X + offsetX,
+                    Y = _initialEnd.Y + offsetY
+                };
+                _busyMoving = true;
             }
             else
             {
-                AbstractFigure newFigure = null;
-                switch (type)
+                var existFigure =
+                    _figures.FirstOrDefault(
+                        o => (o.Start.X == start.X) && (o.Start.Y == start.Y) && (o.FigureType == type));
+                if (existFigure != null)
                 {
-                    case FigureType.Relation:
-                        var newArrow = new CustomArrow {ArrowType = ArrowType.Inheritance, Start = start, End = end};
-                        newFigure = newArrow;
-                        break;
-                    case FigureType.Block:
-                        var newBlock = new CustomBlock {BlockType = BlockType.Class, Start = start, End = end};
-                        newFigure = newBlock;
-                        break;
+                    existFigure.End = end;
                 }
-                newFigure.FigureType = type;
-                _figures.Add(newFigure);
+                else
+                {
+                    AbstractFigure newFigure = null;
+                    switch (type)
+                    {
+                        case FigureType.Relation:
+                            var newArrow = new CustomArrow { ArrowType = ArrowType.Inheritance, Start = start, End = end };
+                            newFigure = newArrow;
+                            break;
+                        case FigureType.Block:
+                            var newBlock = new CustomBlock { BlockType = BlockType.Class, Start = start, End = end };
+                            newFigure = newBlock;
+                            break;
+                    }
+                    newFigure.FigureType = type;
+                    _figures.Add(newFigure);   
+                }
+                _busyCreating = true;
             }
             
         }

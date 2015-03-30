@@ -39,7 +39,7 @@ namespace DrawingButton.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    var temp = new global::System.Resources.ResourceManager("DrawingButton.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DrawingButton.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace DrawingButton.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Рисовать!.
+        ///   Ищет локализованную строку, похожую на Start!.
         /// </summary>
         internal static string DrawingButton_btn_start_Click_Draw {
             get {
@@ -70,7 +70,7 @@ namespace DrawingButton.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Закончить!.
+        ///   Ищет локализованную строку, похожую на Finish!.
         /// </summary>
         internal static string DrawingButton_btn_start_Click_EndDraw {
             get {
