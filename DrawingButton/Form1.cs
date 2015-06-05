@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using DrawingButton.Properties;
+using DrawingButton.Classes;
 
 namespace DrawingButton
 {
@@ -10,27 +10,25 @@ namespace DrawingButton
     {
         private Bitmap _mbit;
         private DrawTool _drawTool;
-        private int start_x, start_y;
+        private int _startX, _startY;
         private readonly List<BlockType> _blockTypes = new List<BlockType> { BlockType.Interface, BlockType.Class };
         private readonly List<ArrowType> _arrowTypes = new List<ArrowType> { ArrowType.Inheritance, ArrowType.Dependency };
-
-        private FigureType _checkedFigureType
-        {
-            get
-            {
-                return ((rbBlock.Checked) ? FigureType.Block : FigureType.Relation);
-            }
-        }
 
         public DrawingButton()
         {
             InitializeComponent();
-            pb_drawing.Visible = false;
-            pb_drawing.Enabled = false;
             pb_drawing.Width = (Width * 9 / 10);
             pb_drawing.Height = (Height * 5 / 8);
             pb_drawing.Location = new Point(Width / 20, Height / 4);
             cmbType.DataSource = _blockTypes.ToArray();
+            CanvasInit();
+        }
+
+        private void CanvasInit()
+        {
+            _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
+            pb_drawing.Image = _mbit;
+            _drawTool = new DrawTool(_mbit);
         }
 
         public Point getEnd(MouseEventArgs e)
@@ -61,29 +59,10 @@ namespace DrawingButton
             return Result;
         }
 
-        private void btn_start_Click(object sender, EventArgs e)
-        {
-            if (pb_drawing.Enabled)
-            {
-                pb_drawing.Visible = false;
-                pb_drawing.Enabled = false;
-                btn_start.Text = Resources.DrawingButton_btn_start_Click_Draw;
-            }
-            else
-            {
-                _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
-                pb_drawing.Image = _mbit;
-                pb_drawing.Visible = true;
-                pb_drawing.Enabled = true;
-                btn_start.Text = Resources.DrawingButton_btn_start_Click_EndDraw;
-                _drawTool = new DrawTool(_mbit);
-            }
-        }
-
         private void pb_drawing_MouseDown(object sender, MouseEventArgs e)
         {
-            start_x = e.X;
-            start_y = e.Y;
+            _startX = e.X;
+            _startY = e.Y;
         }
 
         private void pb_drawing_MouseMove(object sender, MouseEventArgs e)
@@ -96,7 +75,7 @@ namespace DrawingButton
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
-            _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
+            _drawTool.InsertOrUpdate(new Point { X = _startX, Y = _startY }, new Point { X = end_x, Y = end_y }, rbBlock.Checked);
             _drawTool.DrawAll();
             pb_drawing.Image = _mbit;
         }
@@ -110,7 +89,7 @@ namespace DrawingButton
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
-            _drawTool.InsertOrUpdate(new Point { X = start_x, Y = start_y }, new Point { X = end_x, Y = end_y }, _checkedFigureType);
+            _drawTool.InsertOrUpdate(new Point { X = _startX, Y = _startY }, new Point { X = end_x, Y = end_y }, rbBlock.Checked);
             _drawTool.DrawAll();
             _drawTool.FreeCapture();
             pb_drawing.Image = _mbit;
@@ -126,6 +105,11 @@ namespace DrawingButton
             {
                 cmbType.DataSource = _blockTypes;
             }
+        }
+
+        private void btnClearCanvas_Click(object sender, EventArgs e)
+        {
+            CanvasInit();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DrawingButton
+﻿namespace DrawingButton.Classes
 {
     enum CaptureType
     {

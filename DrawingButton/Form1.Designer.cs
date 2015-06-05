@@ -33,27 +33,17 @@ namespace DrawingButton
         /// </summary>
         private void InitializeComponent()
         {
-            this.btn_start = new System.Windows.Forms.Button();
             this.pb_drawing = new System.Windows.Forms.PictureBox();
             this.gbFigure = new System.Windows.Forms.GroupBox();
             this.rbArrow = new System.Windows.Forms.RadioButton();
             this.rbBlock = new System.Windows.Forms.RadioButton();
             this.gbType = new System.Windows.Forms.GroupBox();
             this.cmbType = new System.Windows.Forms.ComboBox();
+            this.btnClearCanvas = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pb_drawing)).BeginInit();
             this.gbFigure.SuspendLayout();
             this.gbType.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btn_start
-            // 
-            this.btn_start.Location = new System.Drawing.Point(15, 15);
-            this.btn_start.Name = "btn_start";
-            this.btn_start.Size = new System.Drawing.Size(140, 50);
-            this.btn_start.TabIndex = 0;
-            this.btn_start.Text = "Start!";
-            this.btn_start.UseVisualStyleBackColor = true;
-            this.btn_start.Click += new System.EventHandler(this.btn_start_Click);
             // 
             // pb_drawing
             // 
@@ -71,7 +61,7 @@ namespace DrawingButton
             // 
             this.gbFigure.Controls.Add(this.rbArrow);
             this.gbFigure.Controls.Add(this.rbBlock);
-            this.gbFigure.Location = new System.Drawing.Point(170, 15);
+            this.gbFigure.Location = new System.Drawing.Point(12, 15);
             this.gbFigure.Name = "gbFigure";
             this.gbFigure.Size = new System.Drawing.Size(105, 70);
             this.gbFigure.TabIndex = 2;
@@ -104,7 +94,7 @@ namespace DrawingButton
             // gbType
             // 
             this.gbType.Controls.Add(this.cmbType);
-            this.gbType.Location = new System.Drawing.Point(290, 15);
+            this.gbType.Location = new System.Drawing.Point(135, 15);
             this.gbType.Name = "gbType";
             this.gbType.Size = new System.Drawing.Size(160, 60);
             this.gbType.TabIndex = 3;
@@ -119,13 +109,23 @@ namespace DrawingButton
             this.cmbType.Size = new System.Drawing.Size(140, 21);
             this.cmbType.TabIndex = 0;
             // 
+            // btnClearCanvas
+            // 
+            this.btnClearCanvas.Location = new System.Drawing.Point(321, 24);
+            this.btnClearCanvas.Name = "btnClearCanvas";
+            this.btnClearCanvas.Size = new System.Drawing.Size(136, 51);
+            this.btnClearCanvas.TabIndex = 4;
+            this.btnClearCanvas.Text = "Clear canvas";
+            this.btnClearCanvas.UseVisualStyleBackColor = true;
+            this.btnClearCanvas.Click += new System.EventHandler(this.btnClearCanvas_Click);
+            // 
             // DrawingButton
             // 
             this.ClientSize = new System.Drawing.Size(784, 361);
+            this.Controls.Add(this.btnClearCanvas);
             this.Controls.Add(this.gbType);
             this.Controls.Add(this.gbFigure);
             this.Controls.Add(this.pb_drawing);
-            this.Controls.Add(this.btn_start);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(800, 400);
             this.MinimizeBox = false;
@@ -143,13 +143,13 @@ namespace DrawingButton
 
         #endregion
 
-        private Button btn_start;
         private PictureBox pb_drawing;
         private GroupBox gbFigure;
         private RadioButton rbArrow;
         private RadioButton rbBlock;
         private GroupBox gbType;
         private ComboBox cmbType;
+        private Button btnClearCanvas;
     }
 }
 
