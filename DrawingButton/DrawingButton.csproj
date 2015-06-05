@@ -54,16 +54,16 @@
     <Compile Include="Classes\Enums\CaptureType.cs" />
     <Compile Include="Classes\FigureInterface.cs" />
     <Compile Include="Classes\FigureRelation.cs" />
-    <Compile Include="DiagramCanvas.cs">
+    <Compile Include="DrawingButton.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DiagramCanvas.Designer.cs">
-      <DependentUpon>DiagramCanvas.cs</DependentUpon>
+    <Compile Include="DrawingButton.Designer.cs">
+      <DependentUpon>DrawingButton.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DiagramCanvas.resx">
-      <DependentUpon>DiagramCanvas.cs</DependentUpon>
+    <EmbeddedResource Include="DrawingButton.resx">
+      <DependentUpon>DrawingButton.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
