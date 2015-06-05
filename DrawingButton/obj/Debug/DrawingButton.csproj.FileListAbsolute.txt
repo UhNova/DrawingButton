@@ -6,3 +6,4 @@ c:\users\щедрин семен\documents\visual studio 2013\Projects\DrawingBu
 c:\users\щедрин семен\documents\visual studio 2013\Projects\DrawingButton\DrawingButton\obj\Debug\DrawingButton.csproj.GenerateResource.Cache
 c:\users\щедрин семен\documents\visual studio 2013\Projects\DrawingButton\DrawingButton\obj\Debug\DrawingButton.exe
 c:\users\щедрин семен\documents\visual studio 2013\Projects\DrawingButton\DrawingButton\obj\Debug\DrawingButton.pdb
+C:\Users\Щедрин Семен\Documents\Visual Studio 2013\Projects\DrawingButton\DrawingButton\obj\Debug\DrawingButton.csprojResolveAssemblyReference.cache

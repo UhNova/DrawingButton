@@ -5,11 +5,11 @@ namespace DrawingButton.Classes
 {
     class FigureRelation
     {
-        private AbstractBlock _startBlock;
+        private BaseBlock _startBlock;
         private AbstractArrow _arrow;
-        private AbstractBlock _endBlock;
+        private BaseBlock _endBlock;
 
-        public AbstractBlock StartBlock
+        public BaseBlock StartBlock
         {
             get
             {
@@ -33,7 +33,7 @@ namespace DrawingButton.Classes
             }
         }
 
-        public AbstractBlock EndBlock
+        public BaseBlock EndBlock
         {
             get
             {
@@ -45,7 +45,7 @@ namespace DrawingButton.Classes
             }
         }
 
-        public FigureRelation(AbstractBlock startBlock, AbstractArrow arrow, AbstractBlock endBlock)
+        public FigureRelation(BaseBlock startBlock, AbstractArrow arrow, BaseBlock endBlock)
         {
             _startBlock = startBlock;
             _arrow = arrow;

@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace DrawingButton.Classes.Blocks
 {
-    abstract class AbstractBlock : FigureInterface
+    class BaseBlock : FigureInterface
     {
         protected Point _start = new Point(0, 0);
         protected Point _end = new Point(0, 0);
@@ -67,7 +67,21 @@ namespace DrawingButton.Classes.Blocks
             set { _height = value; }
         }
 
-        public abstract void DrawFigure(Bitmap target);
-        public abstract void MoveStart(Point start, Point end);
+        public void MoveStart(Point start, Point end)
+        {
+            RaiseMoveOrResizeEvent(start, end);
+        }
+
+        public void DrawFigure(Bitmap target)
+        {
+            var graph = Graphics.FromImage(target);
+            var targetRectangle = new Rectangle
+            {
+                Location = Start,
+                Height = Height,
+                Width = Width
+            };
+            graph.DrawRectangle(_pen, targetRectangle);
+        }
     }
 }

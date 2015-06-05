@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DrawingButton.Classes.Arrows
 {
-    class ImplementationBlock
+    class ImplementationArrow
     {
     }
 }
