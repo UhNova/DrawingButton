@@ -45,9 +45,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Arrows\AbstractArrow.cs" />
+    <Compile Include="Classes\Arrows\ImplementationBlock.cs" />
     <Compile Include="Classes\Arrows\InheritanceArrow.cs" />
     <Compile Include="Classes\Blocks\AbstractBlock.cs" />
     <Compile Include="Classes\Blocks\ClassBlock.cs" />
+    <Compile Include="Classes\Blocks\InterfaceBlock.cs" />
     <Compile Include="Classes\DrawTool.cs" />
     <Compile Include="Classes\Enums\ArrowType.cs" />
     <Compile Include="Classes\Enums\BlockType.cs" />

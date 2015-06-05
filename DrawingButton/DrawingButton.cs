@@ -9,18 +9,18 @@ namespace DrawingButton
 {
     public partial class DrawingButton : Form
     {
-        private Bitmap _mbit;
+        private readonly List<ArrowType> _arrowTypes = new List<ArrowType> {ArrowType.Inheritance, ArrowType.Dependency};
+        private readonly List<BlockType> _blockTypes = new List<BlockType> {BlockType.Interface, BlockType.Class};
         private DrawTool _drawTool;
+        private Bitmap _mbit;
         private int _startX, _startY;
-        private readonly List<BlockType> _blockTypes = new List<BlockType> { BlockType.Interface, BlockType.Class };
-        private readonly List<ArrowType> _arrowTypes = new List<ArrowType> { ArrowType.Inheritance, ArrowType.Dependency };
 
         public DrawingButton()
         {
             InitializeComponent();
-            pb_drawing.Width = (Width * 9 / 10);
-            pb_drawing.Height = (Height * 5 / 8);
-            pb_drawing.Location = new Point(Width / 20, Height / 4);
+            pb_drawing.Width = (Width*9/10);
+            pb_drawing.Height = (Height*5/8);
+            pb_drawing.Location = new Point(Width/20, Height/4);
             cmbType.DataSource = _blockTypes.ToArray();
             CanvasInit();
         }
@@ -68,15 +68,38 @@ namespace DrawingButton
 
         private void pb_drawing_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left) return;
+            var possibleCapture = _drawTool.CheckCapture(e.Location);
+
+            switch (possibleCapture)
+            {
+                case CaptureType.None:
+                    Cursor = Cursors.Default;
+                    break;
+                case CaptureType.Drag:
+                    Cursor = Cursors.Cross;
+                    break;
+                case CaptureType.ResizeHorizontal:
+                    Cursor = Cursors.SizeWE;
+                    break;
+                case CaptureType.ResizeVertical:
+                    Cursor = Cursors.SizeNS;
+                    break;
+            }
+
+            if (e.Button != MouseButtons.Left)
+            {
+                return;
+            }
+
             pb_drawing.Refresh();
-                
+
             var end_x = getEnd(e).X;
             var end_y = getEnd(e).Y;
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
-            _drawTool.InsertOrUpdate(new Point { X = _startX, Y = _startY }, new Point { X = end_x, Y = end_y }, rbBlock.Checked);
+            _drawTool.InsertOrUpdate(new Point {X = _startX, Y = _startY}, new Point {X = end_x, Y = end_y},
+                rbBlock.Checked);
             _drawTool.DrawAll();
             pb_drawing.Image = _mbit;
         }
@@ -90,7 +113,8 @@ namespace DrawingButton
 
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
-            _drawTool.InsertOrUpdate(new Point { X = _startX, Y = _startY }, new Point { X = end_x, Y = end_y }, rbBlock.Checked);
+            _drawTool.InsertOrUpdate(new Point {X = _startX, Y = _startY}, new Point {X = end_x, Y = end_y},
+                rbBlock.Checked);
             _drawTool.DrawAll();
             _drawTool.FreeCapture();
             pb_drawing.Image = _mbit;
@@ -98,7 +122,7 @@ namespace DrawingButton
 
         private void rbArrow_CheckedChanged(object sender, EventArgs e)
         {
-            if (((RadioButton)sender).Checked)
+            if (((RadioButton) sender).Checked)
             {
                 cmbType.DataSource = _arrowTypes;
             }
