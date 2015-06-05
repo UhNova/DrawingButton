@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Drawing;
 
-namespace DrawingButton.Classes
+namespace DrawingButton.Classes.Blocks
 {
     abstract class AbstractBlock : FigureInterface
     {
@@ -68,6 +68,6 @@ namespace DrawingButton.Classes
         }
 
         public abstract void DrawFigure(Bitmap target);
-        public abstract void MoveOrResize(Point start, Point end);
+        public abstract void MoveStart(Point start, Point end);
     }
 }

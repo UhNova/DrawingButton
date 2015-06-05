@@ -1,4 +1,7 @@
-﻿namespace DrawingButton.Classes
+﻿using DrawingButton.Classes.Arrows;
+using DrawingButton.Classes.Blocks;
+
+namespace DrawingButton.Classes
 {
     class FigureRelation
     {

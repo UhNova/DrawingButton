@@ -1,4 +1,4 @@
-﻿namespace DrawingButton.Classes
+﻿namespace DrawingButton.Classes.Enums
 {
     enum BlockType
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace DrawingButton.Classes
+namespace DrawingButton.Classes.Blocks
 {
     class ClassBlock : AbstractBlock
     {
@@ -23,7 +23,7 @@ namespace DrawingButton.Classes
             graph.DrawRectangle(_pen, targetRectangle);
         }
 
-        public override void MoveOrResize(Point start, Point end)
+        public override void MoveStart(Point start, Point end)
         {
             RaiseMoveOrResizeEvent(start, end);
         }

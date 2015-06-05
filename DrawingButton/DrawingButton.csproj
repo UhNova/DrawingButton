@@ -44,27 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\AbstractArrow.cs" />
-    <Compile Include="Classes\AbstractBlock.cs" />
-    <Compile Include="Classes\ArrowType.cs" />
-    <Compile Include="Classes\BlockType.cs" />
-    <Compile Include="Classes\CaptureType.cs" />
-    <Compile Include="Classes\InheritanceArrow.cs" />
-    <Compile Include="Classes\ClassBlock.cs" />
+    <Compile Include="Classes\Arrows\AbstractArrow.cs" />
+    <Compile Include="Classes\Arrows\InheritanceArrow.cs" />
+    <Compile Include="Classes\Blocks\AbstractBlock.cs" />
+    <Compile Include="Classes\Blocks\ClassBlock.cs" />
     <Compile Include="Classes\DrawTool.cs" />
+    <Compile Include="Classes\Enums\ArrowType.cs" />
+    <Compile Include="Classes\Enums\BlockType.cs" />
+    <Compile Include="Classes\Enums\CaptureType.cs" />
     <Compile Include="Classes\FigureInterface.cs" />
     <Compile Include="Classes\FigureRelation.cs" />
-    <Compile Include="Classes\PointDistance.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="DiagramCanvas.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="DiagramCanvas.Designer.cs">
+      <DependentUpon>DiagramCanvas.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="DiagramCanvas.resx">
+      <DependentUpon>DiagramCanvas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -89,6 +88,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

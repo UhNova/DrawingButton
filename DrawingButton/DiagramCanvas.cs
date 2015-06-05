@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using DrawingButton.Classes;
+using DrawingButton.Classes.Enums;
 
 namespace DrawingButton
 {
