@@ -15,7 +15,6 @@ namespace DrawingButton.Classes
         private bool _busyCreating;
         private bool _busyMoving;
         private Bitmap _canvas;
-        private CaptureType _captureType;
         private BaseBlock _currentBlock;
         private Point _initialStart, _initialEnd;
         private List<FigureRelation> _relations;
@@ -70,11 +69,24 @@ namespace DrawingButton.Classes
             set { _arrows = value; }
         }
 
+        /// <summary>
+        ///     Поиск дистанции между двумя точками
+        /// </summary>
+        /// <param name="x">Начальное X</param>
+        /// <param name="y">Начальное Y</param>
+        /// <param name="b">Конечная точка</param>
+        /// <returns></returns>
         private double FindDistance(double x, double y, Point b)
         {
             return Math.Sqrt(Math.Pow(x - b.X, 2) + Math.Pow(y - b.Y, 2));
         }
 
+        /// <summary>
+        ///     Найти ближайшую точку прямоугольника
+        /// </summary>
+        /// <param name="targetPoint">Целевая точка</param>
+        /// <param name="targetBlock">Целевой блок</param>
+        /// <returns></returns>
         private Point FindClosestPoint(Point targetPoint, BaseBlock targetBlock)
         {
             var Distances = new[]
@@ -131,20 +143,20 @@ namespace DrawingButton.Classes
             }
         }
 
-        private bool _checkBinding(BaseArrow targetArrow)
+        /// <summary>
+        ///     Попытка привязки стрелок
+        /// </summary>
+        /// <param name="targetArrow">Целевая стрелка</param>
+        private void _tryBinding(BaseArrow targetArrow)
         {
-            BaseBlock startBlock = null, endBlock = null;
-
-            startBlock =
-                _blocks.FirstOrDefault(
-                    o =>
-                        (((targetArrow.Start.X >= o.Start.X) && (targetArrow.Start.X <= o.End.X)) &&
-                         ((targetArrow.Start.Y >= o.Start.Y) && (targetArrow.Start.Y <= o.End.Y))));
-            endBlock =
-                _blocks.FirstOrDefault(
-                    o =>
-                        (((targetArrow.End.X >= o.Start.X) && (targetArrow.End.X <= o.End.X)) &&
-                         ((targetArrow.End.Y >= o.Start.Y) && (targetArrow.End.Y <= o.End.Y))));
+            var startBlock = _blocks.FirstOrDefault(
+                o =>
+                    (((targetArrow.Start.X >= o.Start.X) && (targetArrow.Start.X <= o.End.X)) &&
+                     ((targetArrow.Start.Y >= o.Start.Y) && (targetArrow.Start.Y <= o.End.Y))));
+            var endBlock = _blocks.FirstOrDefault(
+                o =>
+                    (((targetArrow.End.X >= o.Start.X) && (targetArrow.End.X <= o.End.X)) &&
+                     ((targetArrow.End.Y >= o.Start.Y) && (targetArrow.End.Y <= o.End.Y))));
             var existArrow =
                 _arrows.FirstOrDefault(
                     o =>
@@ -163,10 +175,13 @@ namespace DrawingButton.Classes
                 startBlock.OnMoveOrResize += targetArrow.MoveStart;
                 endBlock.OnMoveOrResize += targetArrow.MoveEnd;
             }
-
-            return true;
         }
 
+        /// <summary>
+        ///     Проверка захвата фигуры
+        /// </summary>
+        /// <param name="target">Целевая точка</param>
+        /// <returns></returns>
         public CaptureType CheckCapture(Point target)
         {
             var outerBlock = _blocks.FirstOrDefault(
@@ -176,11 +191,17 @@ namespace DrawingButton.Classes
             if (outerBlock != null) return CaptureType.Drag;
 
             var horizontalEdgeBlock = _blocks.FirstOrDefault(
-                o => ((((target.X >= o.Start.X) && (target.X <= (o.Start.X + 2))) || ((target.X <= o.End.X) && (target.X >= (o.End.X - 2)))) && ((target.Y >= o.Start.Y) && (target.Y <= o.End.Y))));
+                o =>
+                    ((((target.X >= o.Start.X) && (target.X <= (o.Start.X + 2))) ||
+                      ((target.X <= o.End.X) && (target.X >= (o.End.X - 2)))) &&
+                     ((target.Y >= o.Start.Y) && (target.Y <= o.End.Y))));
             if (horizontalEdgeBlock != null) return CaptureType.ResizeHorizontal;
 
             var verticalEdgeBlock = _blocks.FirstOrDefault(
-                o => ((((target.Y >= o.Start.Y) && (target.Y <= (o.Start.Y + 2))) || ((target.Y <= o.End.Y) && (target.Y >= (o.End.Y - 2)))) && ((target.X >= o.Start.X) && (target.X <= o.End.X))));
+                o =>
+                    ((((target.Y >= o.Start.Y) && (target.Y <= (o.Start.Y + 2))) ||
+                      ((target.Y <= o.End.Y) && (target.Y >= (o.End.Y - 2)))) &&
+                     ((target.X >= o.Start.X) && (target.X <= o.End.X))));
             if (verticalEdgeBlock != null) return CaptureType.ResizeVertical;
 
             return CaptureType.None;
@@ -227,8 +248,6 @@ namespace DrawingButton.Classes
         {
             if (TryCaptureForMove(start) && (!_busyCreating) && (isBlock))
             {
-                _captureType = CaptureType.Drag;
-
                 var offsetX = end.X - start.X;
                 var offsetY = end.Y - start.Y;
 
@@ -287,7 +306,7 @@ namespace DrawingButton.Classes
                     {
                         newFigure = new DependencyArrow(start, end);
                     }
-                    _checkBinding(newFigure);
+                    _tryBinding(newFigure);
 
                     _busyCreating = true;
                 }

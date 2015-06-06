@@ -1,6 +1,9 @@
 ﻿namespace DrawingButton.Classes.Enums
 {
-    enum BlockType
+    /// <summary>
+    ///     Тип блока
+    /// </summary>
+    internal enum BlockType
     {
         Class = 1,
         Interface = 2

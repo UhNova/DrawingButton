@@ -3,13 +3,18 @@ using System.Drawing.Drawing2D;
 
 namespace DrawingButton.Classes.Arrows
 {
-    class DependencyArrow : BaseArrow
+    internal class DependencyArrow : BaseArrow
     {
+        /// <summary>
+        ///     Конструктор
+        /// </summary>
+        /// <param name="start">Начало</param>
+        /// <param name="end">Конец</param>
         public DependencyArrow(Point start, Point end)
         {
             _start = start;
             _end = end;
-            _pen = new Pen(Color.Green, 2) { DashStyle = DashStyle.Dash };
+            _pen = new Pen(Color.Green, 2) {DashStyle = DashStyle.Dash};
         }
     }
 }

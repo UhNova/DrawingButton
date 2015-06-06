@@ -1,6 +1,9 @@
 ﻿namespace DrawingButton.Classes.Enums
 {
-    enum CaptureType
+    /// <summary>
+    ///     Тип захвата
+    /// </summary>
+    internal enum CaptureType
     {
         None = 0,
         Drag = 1,

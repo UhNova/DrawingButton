@@ -2,15 +2,16 @@
 
 namespace DrawingButton.Classes
 {
-    interface FigureInterface
+    internal interface FigureInterface
     {
         /// <summary>
-        /// Метод для отрисовки фигуры
+        ///     Метод для отрисовки фигуры
         /// </summary>
         /// <param name="target">Целевая фигура</param>
         void DrawFigure(Bitmap target);
+
         /// <summary>
-        /// Метод перемещения начальной точки фигуры
+        ///     Метод перемещения начальной точки фигуры
         /// </summary>
         /// <param name="start">Точка начала перемещения</param>
         /// <param name="end">Точка окончания перемещения</param>

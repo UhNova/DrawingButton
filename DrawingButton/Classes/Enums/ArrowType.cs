@@ -1,6 +1,9 @@
 ﻿namespace DrawingButton.Classes.Enums
 {
-    enum ArrowType
+    /// <summary>
+    ///     Тип стрелки
+    /// </summary>
+    internal enum ArrowType
     {
         Inheritance = 1,
         Dependency = 2

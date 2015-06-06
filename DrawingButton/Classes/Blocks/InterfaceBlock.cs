@@ -2,8 +2,13 @@
 
 namespace DrawingButton.Classes.Blocks
 {
-    class InterfaceBlock : BaseBlock
+    internal class InterfaceBlock : BaseBlock
     {
+        /// <summary>
+        ///     Конструктор
+        /// </summary>
+        /// <param name="start">Начальная точка</param>
+        /// <param name="end">Конечная точка</param>
         public InterfaceBlock(Point start, Point end)
         {
             _start = start;

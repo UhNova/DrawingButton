@@ -3,8 +3,13 @@ using System.Drawing.Drawing2D;
 
 namespace DrawingButton.Classes.Blocks
 {
-    class ClassBlock : BaseBlock
+    internal class ClassBlock : BaseBlock
     {
+        /// <summary>
+        ///     Конструктор
+        /// </summary>
+        /// <param name="start">Начальная точка</param>
+        /// <param name="end">Конечная точка</param>
         public ClassBlock(Point start, Point end)
         {
             _start = start;
