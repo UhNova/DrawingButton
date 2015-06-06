@@ -2,7 +2,7 @@
 
 namespace DrawingButton.Classes.Blocks
 {
-    internal class InterfaceBlock : BaseBlock
+    class InterfaceBlock : BaseBlock
     {
         public InterfaceBlock(Point start, Point end)
         {

@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Arrows\BaseArrow.cs" />
-    <Compile Include="Classes\Arrows\ImplementationArrow.cs" />
+    <Compile Include="Classes\Arrows\DependencyArrow.cs" />
     <Compile Include="Classes\Arrows\InheritanceArrow.cs" />
     <Compile Include="Classes\Blocks\BaseBlock.cs" />
     <Compile Include="Classes\Blocks\ClassBlock.cs" />

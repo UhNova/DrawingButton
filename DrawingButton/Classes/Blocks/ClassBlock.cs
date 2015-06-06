@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace DrawingButton.Classes.Blocks
 {
@@ -8,7 +9,7 @@ namespace DrawingButton.Classes.Blocks
         {
             _start = start;
             _end = end;
-            _pen = new Pen(Color.Red, 2);
+            _pen = new Pen(Color.Red, 2) {DashStyle = DashStyle.Dash};
         }
     }
 }

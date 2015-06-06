@@ -2,7 +2,7 @@
 
 namespace DrawingButton.Classes.Arrows
 {
-    class BaseArrow : FigureInterface
+    abstract class BaseArrow : FigureInterface
     {
         protected Point _start = new Point(0, 0);
         protected Point _end = new Point(0, 0);

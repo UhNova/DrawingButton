@@ -47,6 +47,7 @@ namespace DrawingButton
             // 
             // pb_drawing
             // 
+            this.pb_drawing.BackColor = System.Drawing.Color.White;
             this.pb_drawing.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pb_drawing.Location = new System.Drawing.Point(0, 100);
             this.pb_drawing.Name = "pb_drawing";

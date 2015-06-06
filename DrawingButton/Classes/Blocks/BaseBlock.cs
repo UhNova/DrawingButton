@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace DrawingButton.Classes.Blocks
 {
-    class BaseBlock : FigureInterface
+    abstract class BaseBlock : FigureInterface
     {
         protected Point _start = new Point(0, 0);
         protected Point _end = new Point(0, 0);
@@ -81,7 +81,9 @@ namespace DrawingButton.Classes.Blocks
                 Height = Height,
                 Width = Width
             };
+            
             graph.DrawRectangle(_pen, targetRectangle);
+            graph.FillRectangle(new SolidBrush(Color.White), targetRectangle);
         }
     }
 }
