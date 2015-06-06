@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace DrawingButton.Classes.Arrows
 {
-    class ImplementationArrow
+    internal class ImplementationArrow : BaseArrow
     {
+        public ImplementationArrow(Point start, Point end)
+        {
+            _start = start;
+            _end = end;
+            _pen = new Pen(Color.Green, 2);
+        }
     }
 }

@@ -99,7 +99,7 @@ namespace DrawingButton
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
             _drawTool.InsertOrUpdate(new Point {X = _startX, Y = _startY}, new Point {X = end_x, Y = end_y},
-                rbBlock.Checked);
+                rbBlock.Checked, (int)cmbType.SelectedItem);
             _drawTool.DrawAll();
             pb_drawing.Image = _mbit;
         }
@@ -114,7 +114,7 @@ namespace DrawingButton
             _mbit = new Bitmap(pb_drawing.Width, pb_drawing.Height);
             _drawTool.Canvas = _mbit;
             _drawTool.InsertOrUpdate(new Point {X = _startX, Y = _startY}, new Point {X = end_x, Y = end_y},
-                rbBlock.Checked);
+                rbBlock.Checked, (int)cmbType.SelectedItem);
             _drawTool.DrawAll();
             _drawTool.FreeCapture();
             pb_drawing.Image = _mbit;
