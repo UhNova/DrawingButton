@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace DrawingButton.Classes.Blocks
 {
-    internal abstract class BaseBlock : FigureInterface
+    internal class BaseBlock : AbstractFigure
     {
         /// <summary>
         ///     Делегат для подписчиков перемещения
@@ -12,10 +12,7 @@ namespace DrawingButton.Classes.Blocks
         /// <param name="end">Конечное положение</param>
         public delegate void MovingOrResizing(Point start, Point end);
 
-        protected Point _end = new Point(0, 0);
         protected int _height;
-        protected Pen _pen;
-        protected Point _start = new Point(0, 0);
         protected int _width;
 
         /// <summary>
@@ -89,7 +86,7 @@ namespace DrawingButton.Classes.Blocks
         /// </summary>
         /// <param name="start">Начальное положение</param>
         /// <param name="end">Конечное положение</param>
-        public void MoveStart(Point start, Point end)
+        public override void MoveStart(Point start, Point end)
         {
             RaiseMoveOrResizeEvent(start, end);
         }
@@ -98,7 +95,7 @@ namespace DrawingButton.Classes.Blocks
         ///     Отрисовка блока
         /// </summary>
         /// <param name="target">Полотно для рисования</param>
-        public void DrawFigure(Bitmap target)
+        public override void DrawFigure(Bitmap target)
         {
             var graph = Graphics.FromImage(target);
             var targetRectangle = new Rectangle

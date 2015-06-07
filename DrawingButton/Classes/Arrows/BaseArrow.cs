@@ -2,11 +2,8 @@
 
 namespace DrawingButton.Classes.Arrows
 {
-    internal abstract class BaseArrow : FigureInterface
+    internal class BaseArrow : AbstractFigure
     {
-        protected Point _end = new Point(0, 0);
-        protected Pen _pen;
-        protected Point _start = new Point(0, 0);
 
         /// <summary>
         ///     Начальная точка
@@ -30,7 +27,7 @@ namespace DrawingButton.Classes.Arrows
         ///     Нарисовать фигуру
         /// </summary>
         /// <param name="target">Целевое полотно</param>
-        public void DrawFigure(Bitmap target)
+        public override void DrawFigure(Bitmap target)
         {
             var graph = Graphics.FromImage(target);
             graph.DrawLine(_pen, _start, _end);
@@ -41,7 +38,7 @@ namespace DrawingButton.Classes.Arrows
         /// </summary>
         /// <param name="start">Начальное положение</param>
         /// <param name="end">Конечное положение</param>
-        public void MoveStart(Point start, Point end)
+        public override void MoveStart(Point start, Point end)
         {
             var xOffset = end.X - start.X;
             var yOffset = end.Y - start.Y;

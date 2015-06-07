@@ -54,7 +54,7 @@
     <Compile Include="Classes\Enums\ArrowType.cs" />
     <Compile Include="Classes\Enums\BlockType.cs" />
     <Compile Include="Classes\Enums\CaptureType.cs" />
-    <Compile Include="Classes\FigureInterface.cs" />
+    <Compile Include="Classes\AbstractFigure.cs" />
     <Compile Include="Classes\FigureRelation.cs" />
     <Compile Include="DrawingButton.cs">
       <SubType>Form</SubType>
