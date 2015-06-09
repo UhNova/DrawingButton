@@ -82,7 +82,8 @@ namespace DrawingButton.Classes
         }
 
         /// <summary>
-        ///     Найти ближайшую точку прямоугольника
+        ///     Найти ближайшую точку прямоугольника. 
+        /// Вообще этот метод надо вынести в класс прямоугольника. Т.к. это чисто его ответственность знать ближайшую точку
         /// </summary>
         /// <param name="targetPoint">Целевая точка</param>
         /// <param name="targetBlock">Целевой блок</param>
@@ -97,10 +98,13 @@ namespace DrawingButton.Classes
                 FindDistance(((double) targetBlock.Start.X + targetBlock.End.X)/2, targetBlock.End.Y, targetPoint)
             };
 
-            var neededDistance = Distances.Min(o => o);
+            var neededDistance = Distances.Min();
 
+            // Переписать этот кусок. Цикл + switch? Это вообще нормально?
+            
             for (var i = 0; i < 4; i++)
             {
+                // Если уже есть минимальная дистанция зачем еще раз делать проверку?
                 if ((!(Math.Abs(Distances[i] - neededDistance) < 0.05))) continue;
                 switch (i)
                 {
@@ -151,17 +155,29 @@ namespace DrawingButton.Classes
         {
             var startBlock = _blocks.FirstOrDefault(
                 o =>
-                    (((targetArrow.Start.X >= o.Start.X) && (targetArrow.Start.X <= o.End.X)) &&
-                     ((targetArrow.Start.Y >= o.Start.Y) && (targetArrow.Start.Y <= o.End.Y))));
+                    (
+                    // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
+                    // Переменные startBlock и остальные просто теряются в этой мешанине
+                        ((targetArrow.Start.X >= o.Start.X) && (targetArrow.Start.X <= o.End.X)) &&
+                        ((targetArrow.Start.Y >= o.Start.Y) && (targetArrow.Start.Y <= o.End.Y))
+                    )
+                    );
+
             var endBlock = _blocks.FirstOrDefault(
                 o =>
+                    // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
+                    // Переменные startBlock и остальные просто теряются в этой мешанине
                     (((targetArrow.End.X >= o.Start.X) && (targetArrow.End.X <= o.End.X)) &&
                      ((targetArrow.End.Y >= o.Start.Y) && (targetArrow.End.Y <= o.End.Y))));
+
             var existArrow =
                 _arrows.FirstOrDefault(
                     o =>
+                        // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
+                        // Переменные startBlock и остальные просто теряются в этой мешанине
                         (o.Start.X == targetArrow.Start.X) && (o.Start.Y == targetArrow.Start.Y) &&
                         (o.End.X == targetArrow.End.X) && (o.End.Y == targetArrow.End.Y));
+
             var existRelation = _relations.FirstOrDefault(o => (o.StartBlock == startBlock) && (o.EndBlock == endBlock));
 
             if ((startBlock != null) && (endBlock != null) && (startBlock != endBlock) && (existArrow == null) &&
@@ -184,10 +200,14 @@ namespace DrawingButton.Classes
         /// <returns></returns>
         public CaptureType CheckCapture(Point target)
         {
+            // Замечания аналогично методу _tryBinding
             var outerBlock = _blocks.FirstOrDefault(
                 o =>
+                    // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
+                    // (например если требуется работа на экранах с большим расширением)
                     ((o.Start.X + 2) < target.X) && ((o.Start.Y + 2) < target.Y) &&
                     ((o.End.X - 2) > target.X) && ((o.End.Y - 2) > target.Y));
+
             if (outerBlock != null) return CaptureType.Drag;
 
             var horizontalEdgeBlock = _blocks.FirstOrDefault(
@@ -195,13 +215,17 @@ namespace DrawingButton.Classes
                     ((((target.X >= o.Start.X) && (target.X <= (o.Start.X + 2))) ||
                       ((target.X <= o.End.X) && (target.X >= (o.End.X - 2)))) &&
                      ((target.Y >= o.Start.Y) && (target.Y <= o.End.Y))));
+
             if (horizontalEdgeBlock != null) return CaptureType.ResizeHorizontal;
 
             var verticalEdgeBlock = _blocks.FirstOrDefault(
                 o =>
+                    // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
+                    // (например если требуется работа на экранах с большим расширением)
                     ((((target.Y >= o.Start.Y) && (target.Y <= (o.Start.Y + 2))) ||
                       ((target.Y <= o.End.Y) && (target.Y >= (o.End.Y - 2)))) &&
                      ((target.X >= o.Start.X) && (target.X <= o.End.X))));
+
             if (verticalEdgeBlock != null) return CaptureType.ResizeVertical;
 
             return CaptureType.None;
@@ -218,6 +242,8 @@ namespace DrawingButton.Classes
             _currentBlock =
                 _blocks.FirstOrDefault(
                     o =>
+                        // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
+                        // (например если требуется работа на экранах с большим расширением)
                         ((o.Start.X + 2) <= target.X) && ((o.Start.Y + 2) <= target.Y) &&
                         ((o.End.X - 2) >= target.X) && ((o.End.Y - 2) >= target.Y));
 
@@ -243,7 +269,7 @@ namespace DrawingButton.Classes
         /// <param name="start">Начальная точка</param>
         /// <param name="end">Конечная точка</param>
         /// <param name="isBlock">Блок или стрелка</param>
-        /// <param name="figureType">Тип фигуры</param>
+        /// <param name="figureType">Тип фигуры. Тип фигруы должен быть enum.</param>
         public void InsertOrUpdate(Point start, Point end, bool isBlock, int figureType)
         {
             if (TryCaptureForMove(start) && (!_busyCreating) && (isBlock))
@@ -268,6 +294,7 @@ namespace DrawingButton.Classes
 
                 _busyMoving = true;
             }
+            // Выделить методы. Большое количество вложенных if не читабельно
             else
             {
                 if (isBlock)
