@@ -2,7 +2,7 @@
 
 namespace DrawingButton.Classes.Blocks
 {
-    internal class InterfaceBlock : BaseBlock
+    public class InterfaceBlock : BaseBlock
     {
         /// <summary>
         ///     Конструктор

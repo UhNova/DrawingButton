@@ -3,7 +3,7 @@ using DrawingButton.Classes.Blocks;
 
 namespace DrawingButton.Classes
 {
-    internal class FigureRelation
+    public class FigureRelation
     {
         private BaseArrow _arrow;
         private BaseBlock _endBlock;
@@ -47,6 +47,15 @@ namespace DrawingButton.Classes
         {
             get { return _endBlock; }
             set { _endBlock = value; }
+        }
+
+        /// <summary>
+        /// Проверка совпадения связей
+        /// </summary>
+        /// <returns></returns>
+        public bool CheckExist(BaseBlock startBlock, BaseBlock endBlock, BaseArrow arrow)
+        {
+            return ((((_startBlock == startBlock) && (_endBlock == endBlock)) || ((_endBlock == startBlock) && (_startBlock == endBlock))) && (_arrow.ArrowType == arrow.ArrowType));
         }
     }
 }

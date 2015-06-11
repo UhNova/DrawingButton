@@ -2,7 +2,7 @@
 
 namespace DrawingButton.Classes
 {
-    internal abstract class AbstractFigure
+    public abstract class AbstractFigure
     {
         protected Point _end = new Point(0, 0);
         protected Pen _pen;

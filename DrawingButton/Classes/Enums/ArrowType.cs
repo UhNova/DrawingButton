@@ -3,7 +3,7 @@
     /// <summary>
     ///     Тип стрелки
     /// </summary>
-    internal enum ArrowType
+    public enum ArrowType
     {
         Inheritance = 1,
         Dependency = 2

@@ -1,9 +1,16 @@
 ﻿using System.Drawing;
+using DrawingButton.Classes.Enums;
 
 namespace DrawingButton.Classes.Arrows
 {
-    internal class BaseArrow : AbstractFigure
+    public class BaseArrow : AbstractFigure
     {
+        protected ArrowType _arrowType;
+
+        public ArrowType ArrowType
+        {
+            get { return _arrowType; }
+        }
 
         /// <summary>
         ///     Начальная точка
@@ -59,6 +66,17 @@ namespace DrawingButton.Classes.Arrows
 
             _end.X += xOffset;
             _end.Y += yOffset;
+        }
+
+        /// <summary>
+        /// Проверить совпадение стрелок
+        /// </summary>
+        /// <param name="target">Стрелка для проверки</param>
+        /// <returns></returns>
+        public bool CheckEqual(BaseArrow target)
+        {
+            return (_start.X == target.Start.X) && (_start.Y == target.Start.Y) &&
+                   (_end.X == target.End.X) && (_end.Y == target.End.Y);
         }
     }
 }

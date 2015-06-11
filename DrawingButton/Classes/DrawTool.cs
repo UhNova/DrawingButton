@@ -8,7 +8,7 @@ using DrawingButton.Classes.Enums;
 
 namespace DrawingButton.Classes
 {
-    internal class DrawTool
+    public class DrawTool
     {
         private List<BaseArrow> _arrows;
         private List<BaseBlock> _blocks;
@@ -70,59 +70,6 @@ namespace DrawingButton.Classes
         }
 
         /// <summary>
-        ///     Поиск дистанции между двумя точками
-        /// </summary>
-        /// <param name="x">Начальное X</param>
-        /// <param name="y">Начальное Y</param>
-        /// <param name="b">Конечная точка</param>
-        /// <returns></returns>
-        private double FindDistance(double x, double y, Point b)
-        {
-            return Math.Sqrt(Math.Pow(x - b.X, 2) + Math.Pow(y - b.Y, 2));
-        }
-
-        /// <summary>
-        ///     Найти ближайшую точку прямоугольника. 
-        /// Вообще этот метод надо вынести в класс прямоугольника. Т.к. это чисто его ответственность знать ближайшую точку
-        /// </summary>
-        /// <param name="targetPoint">Целевая точка</param>
-        /// <param name="targetBlock">Целевой блок</param>
-        /// <returns></returns>
-        private Point FindClosestPoint(Point targetPoint, BaseBlock targetBlock)
-        {
-            var Distances = new[]
-            {
-                FindDistance(targetBlock.Start.X, ((double) targetBlock.Start.Y + targetBlock.End.Y)/2, targetPoint),
-                FindDistance(((double) targetBlock.Start.X + targetBlock.End.X)/2, targetBlock.Start.Y, targetPoint),
-                FindDistance(targetBlock.End.X, ((double) targetBlock.Start.Y + targetBlock.End.Y)/2, targetPoint),
-                FindDistance(((double) targetBlock.Start.X + targetBlock.End.X)/2, targetBlock.End.Y, targetPoint)
-            };
-
-            var neededDistance = Distances.Min();
-
-            // Переписать этот кусок. Цикл + switch? Это вообще нормально?
-            
-            for (var i = 0; i < 4; i++)
-            {
-                // Если уже есть минимальная дистанция зачем еще раз делать проверку?
-                if ((!(Math.Abs(Distances[i] - neededDistance) < 0.05))) continue;
-                switch (i)
-                {
-                    case 0:
-                        return new Point(targetBlock.Start.X, (targetBlock.Start.Y + targetBlock.End.Y)/2);
-                    case 1:
-                        return new Point((targetBlock.Start.X + targetBlock.End.X)/2, targetBlock.Start.Y);
-                    case 2:
-                        return new Point(targetBlock.End.X, (targetBlock.Start.Y + targetBlock.End.Y)/2);
-                    case 3:
-                        return new Point((targetBlock.Start.X + targetBlock.End.X)/2, targetBlock.End.Y);
-                }
-            }
-
-            return new Point(-1, -1);
-        }
-
-        /// <summary>
         ///     Освободить захват фигуры
         /// </summary>
         public void FreeCapture()
@@ -155,41 +102,30 @@ namespace DrawingButton.Classes
         {
             var startBlock = _blocks.FirstOrDefault(
                 o =>
-                    (
-                    // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
-                    // Переменные startBlock и остальные просто теряются в этой мешанине
-                        ((targetArrow.Start.X >= o.Start.X) && (targetArrow.Start.X <= o.End.X)) &&
-                        ((targetArrow.Start.Y >= o.Start.Y) && (targetArrow.Start.Y <= o.End.Y))
-                    )
-                    );
+                    (o.CheckInnerPoint(targetArrow.Start)));
 
             var endBlock = _blocks.FirstOrDefault(
                 o =>
-                    // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
-                    // Переменные startBlock и остальные просто теряются в этой мешанине
-                    (((targetArrow.End.X >= o.Start.X) && (targetArrow.End.X <= o.End.X)) &&
-                     ((targetArrow.End.Y >= o.Start.Y) && (targetArrow.End.Y <= o.End.Y))));
+                    (o.CheckInnerPoint(targetArrow.End)));
 
             var existArrow =
                 _arrows.FirstOrDefault(
                     o =>
-                        // Все логическое выражение вынести в отдельную функцию. Слишком большое нагромождение. 
-                        // Переменные startBlock и остальные просто теряются в этой мешанине
-                        (o.Start.X == targetArrow.Start.X) && (o.Start.Y == targetArrow.Start.Y) &&
-                        (o.End.X == targetArrow.End.X) && (o.End.Y == targetArrow.End.Y));
+                        (o.CheckEqual(targetArrow)));
 
-            var existRelation = _relations.FirstOrDefault(o => (o.StartBlock == startBlock) && (o.EndBlock == endBlock));
+            var existRelation =
+                _relations.FirstOrDefault(
+                    o =>
+                        o.CheckExist(startBlock, endBlock, targetArrow));
 
             if ((startBlock != null) && (endBlock != null) && (startBlock != endBlock) && (existArrow == null) &&
                 (existRelation == null))
             {
-                targetArrow.Start = FindClosestPoint(targetArrow.Start, startBlock);
-                targetArrow.End = FindClosestPoint(targetArrow.End, endBlock);
-
+                targetArrow.Start = startBlock.FindClosestPoint(targetArrow.Start);
+                targetArrow.End = endBlock.FindClosestPoint(targetArrow.End);
                 _arrows.Add(targetArrow);
-                _relations.Add(new FigureRelation(startBlock, targetArrow, endBlock));
-                startBlock.OnMoveOrResize += targetArrow.MoveStart;
-                endBlock.OnMoveOrResize += targetArrow.MoveEnd;
+
+                CreateRelation(startBlock, endBlock, targetArrow);
             }
         }
 
@@ -200,33 +136,11 @@ namespace DrawingButton.Classes
         /// <returns></returns>
         public CaptureType CheckCapture(Point target)
         {
-            // Замечания аналогично методу _tryBinding
             var outerBlock = _blocks.FirstOrDefault(
                 o =>
-                    // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
-                    // (например если требуется работа на экранах с большим расширением)
-                    ((o.Start.X + 2) < target.X) && ((o.Start.Y + 2) < target.Y) &&
-                    ((o.End.X - 2) > target.X) && ((o.End.Y - 2) > target.Y));
+                    o.CheckInnerPoint(target));
 
             if (outerBlock != null) return CaptureType.Drag;
-
-            var horizontalEdgeBlock = _blocks.FirstOrDefault(
-                o =>
-                    ((((target.X >= o.Start.X) && (target.X <= (o.Start.X + 2))) ||
-                      ((target.X <= o.End.X) && (target.X >= (o.End.X - 2)))) &&
-                     ((target.Y >= o.Start.Y) && (target.Y <= o.End.Y))));
-
-            if (horizontalEdgeBlock != null) return CaptureType.ResizeHorizontal;
-
-            var verticalEdgeBlock = _blocks.FirstOrDefault(
-                o =>
-                    // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
-                    // (например если требуется работа на экранах с большим расширением)
-                    ((((target.Y >= o.Start.Y) && (target.Y <= (o.Start.Y + 2))) ||
-                      ((target.Y <= o.End.Y) && (target.Y >= (o.End.Y - 2)))) &&
-                     ((target.X >= o.Start.X) && (target.X <= o.End.X))));
-
-            if (verticalEdgeBlock != null) return CaptureType.ResizeVertical;
 
             return CaptureType.None;
         }
@@ -242,10 +156,7 @@ namespace DrawingButton.Classes
             _currentBlock =
                 _blocks.FirstOrDefault(
                     o =>
-                        // "2" вынести в константы. Т.к. имеет одинаковый смысл (точность попадания) и может измениться 
-                        // (например если требуется работа на экранах с большим расширением)
-                        ((o.Start.X + 2) <= target.X) && ((o.Start.Y + 2) <= target.Y) &&
-                        ((o.End.X - 2) >= target.X) && ((o.End.Y - 2) >= target.Y));
+                        o.CheckInnerPoint(target));
 
             if (_currentBlock == null) return false;
 
@@ -269,8 +180,8 @@ namespace DrawingButton.Classes
         /// <param name="start">Начальная точка</param>
         /// <param name="end">Конечная точка</param>
         /// <param name="isBlock">Блок или стрелка</param>
-        /// <param name="figureType">Тип фигуры. Тип фигруы должен быть enum.</param>
-        public void InsertOrUpdate(Point start, Point end, bool isBlock, int figureType)
+        /// <param name="figureType">Тип фигуры</param>
+        public void InsertOrUpdate(Point start, Point end, bool isBlock, Enum figureType)
         {
             if (TryCaptureForMove(start) && (!_busyCreating) && (isBlock))
             {
@@ -294,7 +205,7 @@ namespace DrawingButton.Classes
 
                 _busyMoving = true;
             }
-            // Выделить методы. Большое количество вложенных if не читабельно
+
             else
             {
                 if (isBlock)
@@ -309,35 +220,51 @@ namespace DrawingButton.Classes
                     }
                     else
                     {
-                        BaseBlock newFigure;
-                        if (figureType == 1)
-                        {
-                            newFigure = new ClassBlock(start, end);
-                        }
-                        else
-                        {
-                            newFigure = new InterfaceBlock(start, end);
-                        }
-                        _blocks.Add(newFigure);
+                        CreateBlock(start, end, figureType);
                     }
                     _busyCreating = true;
                 }
                 else
                 {
-                    BaseArrow newFigure;
-                    if (figureType == 1)
-                    {
-                        newFigure = new InheritanceArrow(start, end);
-                    }
-                    else
-                    {
-                        newFigure = new DependencyArrow(start, end);
-                    }
-                    _tryBinding(newFigure);
-
+                    CreateArrow(start, end, figureType);
                     _busyCreating = true;
                 }
             }
+        }
+
+        private void CreateBlock(Point start, Point end, Enum figureType)
+        {
+            BaseBlock newFigure;
+            if ((BlockType) figureType == BlockType.Class)
+            {
+                newFigure = new ClassBlock(start, end);
+            }
+            else
+            {
+                newFigure = new InterfaceBlock(start, end);
+            }
+            _blocks.Add(newFigure);
+        }
+
+        private void CreateArrow(Point start, Point end, Enum figureType)
+        {
+            BaseArrow newFigure;
+            if ((ArrowType) figureType == ArrowType.Inheritance)
+            {
+                newFigure = new InheritanceArrow(start, end);
+            }
+            else
+            {
+                newFigure = new DependencyArrow(start, end);
+            }
+            _tryBinding(newFigure);
+        }
+
+        private void CreateRelation(BaseBlock startBlock, BaseBlock endBlock, BaseArrow targetArrow)
+        {
+            _relations.Add(new FigureRelation(startBlock, targetArrow, endBlock));
+            startBlock.OnMoveOrResize += targetArrow.MoveStart;
+            endBlock.OnMoveOrResize += targetArrow.MoveEnd;
         }
     }
 }

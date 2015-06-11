@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using DrawingButton.Classes.Enums;
 
 namespace DrawingButton.Classes.Arrows
 {
-    internal class DependencyArrow : BaseArrow
+    public class DependencyArrow : BaseArrow
     {
         /// <summary>
         ///     Конструктор
@@ -12,6 +13,7 @@ namespace DrawingButton.Classes.Arrows
         /// <param name="end">Конец</param>
         public DependencyArrow(Point start, Point end)
         {
+            _arrowType = ArrowType.Dependency;
             _start = start;
             _end = end;
             _pen = new Pen(Color.Green, 2) {DashStyle = DashStyle.Dash};

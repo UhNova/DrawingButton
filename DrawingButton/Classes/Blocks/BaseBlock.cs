@@ -1,9 +1,10 @@
 using System;
 using System.Drawing;
+using System.Linq;
 
 namespace DrawingButton.Classes.Blocks
 {
-    internal class BaseBlock : AbstractFigure
+    public class BaseBlock : AbstractFigure
     {
         /// <summary>
         ///     Делегат для подписчиков перемещения
@@ -122,6 +123,62 @@ namespace DrawingButton.Classes.Blocks
         protected void RaiseMoveOrResizeEvent(Point start, Point end)
         {
             if (OnMoveOrResize != null) OnMoveOrResize(start, end);
+        }
+
+        /// <summary>
+        ///     Поиск дистанции между двумя точками
+        /// </summary>
+        /// <param name="x">Начальное X</param>
+        /// <param name="y">Начальное Y</param>
+        /// <param name="b">Конечная точка</param>
+        /// <returns></returns>
+        protected double FindDistance(double x, double y, Point b)
+        {
+            return Math.Sqrt(Math.Pow(x - b.X, 2) + Math.Pow(y - b.Y, 2));
+        }
+
+        /// <summary>
+        ///     Найти ближайшую точку прямоугольника
+        /// </summary>
+        /// <param name="targetPoint">Целевая точка</param>
+        /// <returns></returns>
+        public Point FindClosestPoint(Point targetPoint)
+        {
+            var Distances = new[]
+            {
+                FindDistance(Start.X, ((double) Start.Y + End.Y)/2, targetPoint),
+                FindDistance(((double) Start.X + End.X)/2, Start.Y, targetPoint),
+                FindDistance(End.X, ((double) Start.Y + End.Y)/2, targetPoint),
+                FindDistance(((double) Start.X + End.X)/2, End.Y, targetPoint)
+            };
+
+            var neededDistance = Distances.Min();
+
+            int pointType = Distances.ToList().IndexOf(neededDistance);
+            switch (pointType)
+            {
+                case 0:
+                    return new Point(Start.X, (Start.Y + End.Y) / 2);
+                case 1:
+                    return new Point((Start.X + End.X) / 2, Start.Y);
+                case 2:
+                    return new Point(End.X, (Start.Y + End.Y) / 2);
+                case 3:
+                    return new Point((Start.X + End.X) / 2, End.Y);
+            }
+            
+            return new Point(-1, -1);
+        }
+
+        /// <summary>
+        /// Проверка нахождения точки в блоке
+        /// </summary>
+        /// <param name="target">Целевая точка</param>
+        /// <returns></returns>
+        public bool CheckInnerPoint(Point target)
+        {
+            return ((target.X >= _start.X) && (target.X <= _end.X)) &&
+                   ((target.Y >= _start.Y) && (target.Y <= _end.Y));
         }
     }
 }

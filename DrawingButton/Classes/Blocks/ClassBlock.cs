@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace DrawingButton.Classes.Blocks
 {
-    internal class ClassBlock : BaseBlock
+    public class ClassBlock : BaseBlock
     {
         /// <summary>
         ///     Конструктор

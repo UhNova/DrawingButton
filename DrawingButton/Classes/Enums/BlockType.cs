@@ -3,7 +3,7 @@
     /// <summary>
     ///     Тип блока
     /// </summary>
-    internal enum BlockType
+    public enum BlockType
     {
         Class = 1,
         Interface = 2
