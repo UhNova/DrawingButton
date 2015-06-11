@@ -55,7 +55,10 @@ namespace DrawingButton.Classes
         /// <returns></returns>
         public bool CheckExist(BaseBlock startBlock, BaseBlock endBlock, BaseArrow arrow)
         {
-            return ((((_startBlock == startBlock) && (_endBlock == endBlock)) || ((_endBlock == startBlock) && (_startBlock == endBlock))) && (_arrow.ArrowType == arrow.ArrowType));
+            //сложные конструкции надо упрощать с помощью промежуточных переменных с понятным именем
+            bool bHasStraitArrow = (_startBlock == startBlock) && (_endBlock == endBlock);
+            bool bHasReverceArrow = (_endBlock == startBlock) && (_startBlock == endBlock);
+            return ((bHasStraitArrow || bHasReverceArrow) && (_arrow.ArrowType == arrow.ArrowType));
         }
     }
 }

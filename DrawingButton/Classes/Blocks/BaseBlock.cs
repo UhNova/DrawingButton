@@ -64,6 +64,17 @@ namespace DrawingButton.Classes.Blocks
             set { _end = value; }
         }
 
+        public Point Middle
+        {
+            get
+            {
+                return new Point(
+                    (Start.Y + End.Y) / 2,
+                    (Start.X + End.X) / 2
+                    );
+            }
+        }
+
         /// <summary>
         ///     Ширина блока
         /// </summary>
@@ -132,9 +143,9 @@ namespace DrawingButton.Classes.Blocks
         /// <param name="y">Начальное Y</param>
         /// <param name="b">Конечная точка</param>
         /// <returns></returns>
-        protected double FindDistance(double x, double y, Point b)
+        private static double FindDistance(Point a, Point b)
         {
-            return Math.Sqrt(Math.Pow(x - b.X, 2) + Math.Pow(y - b.Y, 2));
+            return Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2));
         }
 
         /// <summary>
@@ -144,30 +155,34 @@ namespace DrawingButton.Classes.Blocks
         /// <returns></returns>
         public Point FindClosestPoint(Point targetPoint)
         {
-            var Distances = new[]
-            {
-                FindDistance(Start.X, ((double) Start.Y + End.Y)/2, targetPoint),
-                FindDistance(((double) Start.X + End.X)/2, Start.Y, targetPoint),
-                FindDistance(End.X, ((double) Start.Y + End.Y)/2, targetPoint),
-                FindDistance(((double) Start.X + End.X)/2, End.Y, targetPoint)
+            //сложные конструкции надо упрощать с помощью промежуточных переменных с понятным именем
+            // Как дополнительное правило можно сказать: любая сущность должна иметь имя. 
+            // Если используем точку в середине правой стороны - лучша дать ей имя.
+            Point middleLeft = new Point(Start.X, Middle.Y);
+            Point middleTop = new Point(Middle.X, Start.Y);
+            Point middleRight = new Point(End.X, Middle.Y);
+            Point middleBottom = new Point(Middle.X, End.Y);
+
+            Point[] points = {
+                middleLeft,
+                middleRight,
+                middleTop,
+                middleBottom
             };
 
-            var neededDistance = Distances.Min();
-
-            int pointType = Distances.ToList().IndexOf(neededDistance);
-            switch (pointType)
+            var distances = new[]
             {
-                case 0:
-                    return new Point(Start.X, (Start.Y + End.Y) / 2);
-                case 1:
-                    return new Point((Start.X + End.X) / 2, Start.Y);
-                case 2:
-                    return new Point(End.X, (Start.Y + End.Y) / 2);
-                case 3:
-                    return new Point((Start.X + End.X) / 2, End.Y);
-            }
-            
-            return new Point(-1, -1);
+                FindDistance(middleLeft, targetPoint),
+                FindDistance(middleRight, targetPoint),
+                FindDistance(middleTop, targetPoint),
+                FindDistance(middleBottom, targetPoint)
+            };
+
+            var neededDistance = distances.Min();
+
+            int pointIndex = distances.ToList().IndexOf(neededDistance);
+
+            return points[pointIndex];
         }
 
         /// <summary>
